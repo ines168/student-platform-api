@@ -1,13 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.model.CustomUserDetails;
-import com.example.demo.model.RefreshToken;
-import com.example.demo.model.Role;
-import com.example.demo.model.User;
+import com.example.demo.model.*;
 import com.example.demo.model.dto.AuthResponse;
 import com.example.demo.model.dto.LoginRequest;
 import com.example.demo.model.dto.RegisterRequest;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.VerificationTokenRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +24,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final AuthenticationManager authenticationManager;
+    private final VerificationTokenService verificationTokenService;
+    private final EmailService emailService;
 
     public void register(RegisterRequest request) {
         if(userRepository.existsByEmail(request.getEmail())) {
@@ -43,15 +43,13 @@ public class AuthService {
                 LocalDateTime.now()
         );
         userRepository.save(user);
+
+        VerificationToken token = verificationTokenService.createVerificationToken(user);
+        String verificationLink = "http://localhost:8081/api/auth/verify-email?token=" + token.getToken();
+        emailService.sendEmailVerification(user.getEmail(), verificationLink);
     }
 
     public AuthResponse login(LoginRequest request) {
-//        User user = userRepository.findByEmail(request.getEmail())
-//                .orElseThrow(() -> new RuntimeException("User doesn't exist"));
-//
-//        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-//            throw new RuntimeException("Invalid email or password");
-//        }
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));

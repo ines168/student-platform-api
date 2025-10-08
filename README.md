@@ -8,6 +8,7 @@ This is the authentication and authorization module, built with **Java Spring Bo
 * ✅ Secure password hashing with BCrypt
 * ✅ User authentication filter
 * ✅ Logout & token invalidation
+* ✅ Email verification
 
 ---
 
@@ -18,6 +19,7 @@ This is the authentication and authorization module, built with **Java Spring Bo
 * Email and password
 * Bcrypt password hashing
 * Role assignment (STUDENT by default)
+* Sends email verification link
 
 ### ✅ JWT Authentication
 
@@ -31,6 +33,13 @@ This is the authentication and authorization module, built with **Java Spring Bo
 * Save refresh token in DB (`refresh_tokens` table)
 * Endpoint to refresh access token
 * Expiration handling and invalidation
+
+### ✅ Email Verification
+
+* Sends verification link after registration
+* Verifies email via token in URL
+* Token is time-limited
+* Resend verification link endpoint
 
 ### ✅ Logout
 
@@ -48,12 +57,14 @@ This is the authentication and authorization module, built with **Java Spring Bo
 
 ###  Auth Endpoints
 
-| Method | Endpoint             | Description                   |
-| ------ | -------------------- | ----------------------------- |
-| POST   | `/api/auth/register` | Register new user             |
-| POST   | `/api/auth/login`    | Authenticate and get tokens   |
-| POST   | `/api/auth/refresh`  | Get new access token          |
-| POST   | `/api/auth/logout`   | Logout & revoke refresh token |
+| Method | Endpoint                        | Description                         |
+|--------|---------------------------------|-------------------------------------|
+| POST   | `/api/auth/register`            | Register new user                   |
+| POST   | `/api/auth/login`               | Authenticate and get tokens         |
+| POST   | `/api/auth/refresh`             | Get new access token                |
+| POST   | `/api/auth/logout`              | Logout & revoke refresh token       |
+| GET    | `/api/auth/verify-email`        | Verify email using token (via link) |
+| POST   | `/api/auth/resend-verification` | Resend verification email           |
 
 ---
 
@@ -74,12 +85,12 @@ This is the authentication and authorization module, built with **Java Spring Bo
 
 * `users`
 * `refresh_token`
+* `verification_token`
 
 ---
 
 ##  Next Up (Planned Features)
 
-* Email verification via token
 * Profile management endpoints
 * Rate limiting on login/register
 * Role-based field validation
@@ -94,5 +105,6 @@ This is the authentication and authorization module, built with **Java Spring Bo
 * JPA + MySQL
 * JWT (`io.jsonwebtoken`)
 * BCrypt (Spring Security)
+* JavaMail
 
 ---

@@ -6,16 +6,11 @@ import com.example.demo.model.dto.AuthResponse;
 import com.example.demo.model.dto.LoginRequest;
 import com.example.demo.model.dto.RegisterRequest;
 import com.example.demo.repository.RefreshTokenRepository;
-import com.example.demo.service.AuthService;
-import com.example.demo.service.JwtService;
-import com.example.demo.service.RefreshTokenService;
+import com.example.demo.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -27,6 +22,7 @@ public class AuthController {
     private final RefreshTokenRepository refreshTokenRepository;
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
+    private final EmailVerificationService emailVerificationService;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
@@ -59,5 +55,15 @@ public class AuthController {
     public ResponseEntity<String> logout(@AuthenticationPrincipal User user) {
         refreshTokenService.deleteByUser(user);
         return ResponseEntity.ok("Logged out successfully!");
+    }
+
+    @GetMapping("/verify-email")
+    public ResponseEntity<String> verifyEmail(@RequestParam("token") String tokenString) {
+        return ResponseEntity.ok(emailVerificationService.verifyEmail(tokenString));
+    }
+
+    @PostMapping("/resend-verification")
+    public ResponseEntity<String> verifyEmailResend(@RequestParam("email") String email) {
+        return ResponseEntity.ok(emailVerificationService.resendVerification(email));
     }
 }
