@@ -49,8 +49,6 @@ public class EmailVerificationService {
 
         verificationTokenService.deleteByUser(user); //delete existing
         VerificationToken token = verificationTokenService.createVerificationToken(user);
-        String verificationLink = "http://localhost:8081/api/auth/verify-email?token=" + token.getToken();
-//        emailService.sendEmailVerification(user.getEmail(), verificationLink);
         emailService.verificationEmail(user.getEmail(), token.getToken());
         return "Verification email sent.";
     }

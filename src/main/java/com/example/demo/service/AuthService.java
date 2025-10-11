@@ -45,8 +45,7 @@ public class AuthService {
         userRepository.save(user);
 
         VerificationToken token = verificationTokenService.createVerificationToken(user);
-        String verificationLink = "http://localhost:8081/api/auth/verify-email?token=" + token.getToken();
-        emailService.sendEmailVerification(user.getEmail(), verificationLink);
+        emailService.verificationEmail(user.getEmail(), token.getToken());
     }
 
     public AuthResponse login(LoginRequest request) {

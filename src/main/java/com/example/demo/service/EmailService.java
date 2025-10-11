@@ -3,7 +3,6 @@ package com.example.demo.service;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -14,16 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class EmailService {
     private final JavaMailSender mailSender;
     private final Environment environment;
-
-    public void sendEmailVerification(String toEmail, String verificationLink) {
-        String fromEmail = environment.getProperty("spring.mail.username");
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject("Please Verify Your Email");
-        message.setText("Click the following link: " + verificationLink);
-        message.setFrom(fromEmail);
-        mailSender.send(message);
-    }
 
     public void verificationEmail(String email, String verificationToken) {
         String subject = "Please Verify Your Email";
