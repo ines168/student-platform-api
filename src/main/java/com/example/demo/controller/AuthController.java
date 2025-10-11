@@ -8,8 +8,11 @@ import com.example.demo.model.dto.RegisterRequest;
 import com.example.demo.repository.RefreshTokenRepository;
 import com.example.demo.service.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -23,6 +26,7 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
     private final EmailVerificationService emailVerificationService;
+    private final PasswordResetService passwordResetService;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
@@ -65,5 +69,15 @@ public class AuthController {
     @PostMapping("/resend-verification")
     public ResponseEntity<String> verifyEmailResend(@RequestParam("email") String email) {
         return ResponseEntity.ok(emailVerificationService.resendVerification(email));
+    }
+
+    @PostMapping("/request-reset")
+    public ResponseEntity<String> requestReset(@RequestParam("email") String email) {
+        return ResponseEntity.ok(passwordResetService.createResetToken(email));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String password) {
+        return ResponseEntity.ok(passwordResetService.resetPassword(token, password));
     }
 }

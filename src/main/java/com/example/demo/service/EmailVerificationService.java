@@ -17,6 +17,7 @@ public class EmailVerificationService {
     private final EmailService emailService;
 
     public String verifyEmail(String tokenString) {
+        System.out.println(tokenString);
         Optional<VerificationToken> tokenOpt = verificationTokenService.getByToken(tokenString);
         if(tokenOpt.isEmpty()) {
             throw new RuntimeException("Invalid token");
@@ -49,7 +50,8 @@ public class EmailVerificationService {
         verificationTokenService.deleteByUser(user); //delete existing
         VerificationToken token = verificationTokenService.createVerificationToken(user);
         String verificationLink = "http://localhost:8081/api/auth/verify-email?token=" + token.getToken();
-        emailService.sendEmailVerification(user.getEmail(), verificationLink);
+//        emailService.sendEmailVerification(user.getEmail(), verificationLink);
+        emailService.verificationEmail(user.getEmail(), token.getToken());
         return "Verification email sent.";
     }
 }

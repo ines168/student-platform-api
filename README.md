@@ -6,9 +6,10 @@ This is the authentication and authorization module, built with **Java Spring Bo
 * ✅ JWT-based login
 * ✅ Refresh token implementation
 * ✅ Secure password hashing with BCrypt
+* ✅ Email verification
+* ✅ Password reset via email link
 * ✅ User authentication filter
 * ✅ Logout & token invalidation
-* ✅ Email verification
 
 ---
 
@@ -51,6 +52,13 @@ This is the authentication and authorization module, built with **Java Spring Bo
 * Custom JWT filter extracts and validates token
 * Injects authenticated `User` into controller via `@AuthenticationPrincipal`
 
+### ✅ Password Reset
+
+* Request password reset via email
+* Email contains time-limited token link
+* Secure password update via /reset-password
+* Tokens stored in `password_reset_token` table
+
 ---
 
 ##  API Endpoints
@@ -63,8 +71,22 @@ This is the authentication and authorization module, built with **Java Spring Bo
 | POST   | `/api/auth/login`               | Authenticate and get tokens         |
 | POST   | `/api/auth/refresh`             | Get new access token                |
 | POST   | `/api/auth/logout`              | Logout & revoke refresh token       |
+
+
+###  Email
+
+| Method | Endpoint                        | Description                         |
+|--------|---------------------------------|-------------------------------------|
 | GET    | `/api/auth/verify-email`        | Verify email using token (via link) |
 | POST   | `/api/auth/resend-verification` | Resend verification email           |
+
+###  Password
+
+| Method | Endpoint                   | Description                      |
+|--------|----------------------------|----------------------------------|
+| POST   | `/api/auth/request-reset`  | Request password reset via email |
+| GET    | `/api/auth/reset-password` | Serve reset form                 |
+| POST   | `/api/auth/reset-password` | Reset password using token       |
 
 ---
 
@@ -86,6 +108,7 @@ This is the authentication and authorization module, built with **Java Spring Bo
 * `users`
 * `refresh_token`
 * `verification_token`
+* `password_reset_token`
 
 ---
 
