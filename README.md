@@ -10,6 +10,7 @@ This is the authentication and authorization module, built with **Java Spring Bo
 * ✅ Password reset via email link
 * ✅ User authentication filter
 * ✅ Logout & token invalidation
+* ✅ Rate limiting on sesnsitive endpoints
 
 ---
 
@@ -59,6 +60,12 @@ This is the authentication and authorization module, built with **Java Spring Bo
 * Secure password update via /reset-password
 * Tokens stored in `password_reset_token` table
 
+### ✅ Rate Limiting
+
+* Prevents abuse on key endpoints
+* Limits the number of requests per IP/user
+* Implemented using a filter-based approach (via Bucket4j)
+
 ---
 
 ##  API Endpoints
@@ -98,6 +105,7 @@ This is the authentication and authorization module, built with **Java Spring Bo
     * `/api/auth/**`
 * Custom `JwtAuthFilter` parses and validates token from `Authorization: Bearer <token>` header
 * Injects user into controller via `@AuthenticationPrincipal`
+* Rate limiting filter runs before security filters to block high-frequency abuse
 
 ---
 
@@ -115,7 +123,6 @@ This is the authentication and authorization module, built with **Java Spring Bo
 ##  Next Up (Planned Features)
 
 * Profile management endpoints
-* Rate limiting on login/register
 * Role-based field validation
 
 ---
@@ -129,5 +136,6 @@ This is the authentication and authorization module, built with **Java Spring Bo
 * JWT (`io.jsonwebtoken`)
 * BCrypt (Spring Security)
 * JavaMail
+* Bucket4j
 
 ---
